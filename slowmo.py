@@ -5,11 +5,11 @@ import sys, datetime, pymongo, time
 
 # TODO: need to assert that the protocol is 1
 
-usage = "./slowmo <host_ip> <host_port> <time_span(min)> \
+usage = "./slowmo.py <host_ip> <host_port> <time_span(min)> \
 <sampling_interval(s)> <output_file>\n"
 
 def main(ip, port, span, it, ouput):
-    client = pymong.MongoClient(ip, int(port))
+    client = pymongo.MongoClient(ip, int(port))
     span = 60*time_span # calculate the total monitor time in seconds
     mm = client.admin.command("replSetGetStatus")['members']
     n = len(mm)     # the number of replicas in the set
