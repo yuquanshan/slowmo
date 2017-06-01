@@ -8,7 +8,7 @@ import sys, datetime, pymongo, time
 usage = "./slowmo.py <host_ip> <host_port> <time_span(min)> \
 <sampling_interval(s)> <output_file>\n"
 
-def main(ip, port, span, it, ouput):
+def main(ip, port, span, it, output):
     client = pymongo.MongoClient(ip, int(port))
     span = 60*int(span) # calculate the total monitor time in seconds
     it = int(it)
