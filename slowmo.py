@@ -10,7 +10,8 @@ usage = "./slowmo.py <host_ip> <host_port> <time_span(min)> \
 
 def main(ip, port, span, it, ouput):
     client = pymongo.MongoClient(ip, int(port))
-    span = 60*span # calculate the total monitor time in seconds
+    span = 60*int(span) # calculate the total monitor time in seconds
+    it = int(it)
     mm = client.admin.command("replSetGetStatus")['members']
     n = len(mm)     # the number of replicas in the set
     box = []
