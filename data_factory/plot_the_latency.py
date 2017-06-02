@@ -7,7 +7,7 @@ import sys
 
 # plot the first <span> minutes of latency, given a sampling interval
 usage = './plot_the_latency.py <interval(s)> <span(m)> <plot_title> \
-<fname1> [<fname2>...]'
+<fname1> [(optional)<fname2>...]'
 
 def main(it, span, title, fnames):
     it = int(it)
