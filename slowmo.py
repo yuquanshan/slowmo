@@ -16,11 +16,10 @@ def main(ip, port, span, it, output):
     n = len(mm)     # the number of replicas in the set
     box = []
     for i in range(0, span/it):
-        start = time.clock()
+        start = time.time()
         mm = client.admin.command("replSetGetStatus")['members']
         box.append(get_lag(mm))
-        end = time.clock()
-        time.sleep(it - (end - start))
+        time.sleep(it - (time.time() - start))
     fo = open(output, 'w')
     for i in box:
         fo.write(i+'\n')
