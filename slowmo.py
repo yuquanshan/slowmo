@@ -16,9 +16,11 @@ def main(ip, port, span, it, output):
     n = len(mm)     # the number of replicas in the set
     box = []
     for i in range(0, span/it):
+        start = time.time() # calculate the time elapsed
         mm = client.admin.command("replSetGetStatus")['members']
         box.append(get_lag(mm))
-        time.sleep(it)
+        end = time.time()
+        time.sleep(it - (end - start))
     fo = open(output, 'w')
     for i in box:
         fo.write(i+'\n')
@@ -32,7 +34,7 @@ def get_lag(mm):    # return the replication lag of replicas as well as prim id
             prim = j
             primt = mm[j]['optimeDate']
             break
-    assert prim >= 0, "LOST PRIMARY, MONITOR STOPS..."
+    assert prim >= 0, "LOST PRIMARY, MONITORING STOPS..."
     s = ""
     for j in range(0,n):
         s = s + str((primt - mm[j]['optimeDate']).total_seconds()) + ' '
