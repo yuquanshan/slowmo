@@ -14,6 +14,7 @@ def main(it, span, title, fnames):
     span = int(span)
     colorpool = ['red', 'blue', 'green', 'yellow', 'black']
     fc = 0     # file counter
+    maxheight = 0
     for fname in fnames:
         box = []
         fi = open(fname, 'r')
@@ -28,14 +29,17 @@ def main(it, span, title, fnames):
             a = l.split()
             if len(a) > 0:
                 box.append(float(a[0]))
-        plt.plot(np.linspace(it,it*len(box),len(box)), \
-        np.array(box), color=colorpool[fc], label='replica '+str(fc+1))
+        if max(box) > maxheight:
+            maxheight = max(box)
+        plt.plot(np.linspace(it,it*len(box),len(box)), np.array(box), \
+        '.--', color=colorpool[fc], label='replica '+str(fc+1))
         fc = fc + 1
 
     plt.legend(loc = 'upper right')
     plt.xlabel('sec')
     plt.ylabel('replication delay (sec)')
     plt.title(title)
+    plt.ylim(-1, maxheight+1)
     plt.show()
 
 if __name__ == '__main__':
