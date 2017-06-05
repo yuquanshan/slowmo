@@ -5,11 +5,11 @@ import sys, datetime, pymongo, time
 
 # TODO: need to assert that the protocol is 1
 
-usage = "./slowmo.py <host_ip> <host_port> <time_span(min)> \
+usage = "./slowmo.py <connection_uri> <time_span(min)> \
 <sampling_interval(s)> <output_file>\n"
 
-def main(ip, port, span, it, output):
-    client = pymongo.MongoClient(ip, int(port))
+def main(uri, span, it, output):
+    client = pymongo.MongoClient(uri)
     span = 60*int(span) # calculate the total monitor time in seconds
     it = int(it)
     mm = client.admin.command("replSetGetStatus")['members']
@@ -44,4 +44,4 @@ if __name__ == "__main__":
     if len(sys.argv) < 6:
         print usage
     else:
-        main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+        main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
