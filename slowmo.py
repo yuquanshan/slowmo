@@ -41,7 +41,7 @@ def get_lag(mm):    # return the replication lag of replicas as well as prim id
     return s
 
 if __name__ == "__main__":
-    if len(sys.argv) < 6:
+    if len(sys.argv) < 5:
         print usage
     else:
         main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
