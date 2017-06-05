@@ -8,6 +8,12 @@ import sys, datetime, pymongo, time
 usage = "./slowmo.py <connection_uri> <time_span(min)> \
 <sampling_interval(s)> <output_file>\n"
 
+starttime = time.time()
+
+class AbnormalState(Exception):
+    def __init__(self, message):
+        self.message = message
+
 def main(uri, span, it, output):
     client = pymongo.MongoClient(uri)
     span = 60*int(span) # calculate the total monitor time in seconds
@@ -18,7 +24,14 @@ def main(uri, span, it, output):
     for i in range(0, span/it):
         start = time.time()
         mm = client.admin.command("replSetGetStatus")['members']
-        box.append(get_lag(mm))
+        try:
+            box.append(get_lag(mm))
+        except AbnormalState:
+            # flush the good data
+            fo = open(output, 'w')
+            for i in box:
+                fo.write(i+'\n')
+            fo.close()
         time.sleep(it - (time.time() - start))
     fo = open(output, 'w')
     for i in box:
@@ -33,6 +46,10 @@ def get_lag(mm):    # return the replication lag of replicas as well as prim id
             prim = j
             primt = mm[j]['optimeDate']
             break
+        elif mm[j]['stateStr'] != 'SECONDARY':
+            print "ALERT: member {} enters {} mode {} seconds from \
+            begnining\n".format(j, mm[j]['stateStr'], time.time() - starttime)
+            raise AbnormalState(mm[j]['stateStr'])
     assert prim >= 0, "LOST PRIMARY, MONITORING STOPS..."
     s = ""
     for j in range(0,n):
