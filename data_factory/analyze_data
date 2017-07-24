@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# usage: ./analyze_data <file path> <title of the graph>
+
+rm secondary_*
+./parse_output.py $1 0
+./plot_the_latency.py 1 15 "$2" secondary_0 secondary_1
+rm secondary_*
